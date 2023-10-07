@@ -1,0 +1,59 @@
+ul {
+    display: inline;
+}
+
+h1 {
+    margin: 0;
+}
+
+.listklasse {
+    display: flex;
+    flex-direction: row;
+}
+
+.testingclass {
+    font-size: 2em;
+}
+
+.create {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    margin: auto;
+}
+
+input {
+    width: 292px;
+    background-color: transparent;
+}
+
+button {
+    width: 300px;
+    background-color: transparent;
+}
+
+#deleteAllButton {
+    color: red;
+}
+
+.listklasse {
+    border-style: solid;
+    border-radius: 10px;
+    width: 300px;
+    height: 212px;
+}
+
+#mainDiv {
+    display: flex;
+    flex-direction: row;
+    width: 924px;
+    flex-wrap: wrap;
+    margin: auto;
+}
+
+#container {
+    align-content: center;
+}
