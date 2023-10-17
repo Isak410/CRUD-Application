@@ -1,36 +1,20 @@
 const mainDiv = document.querySelector('#mainDiv')
 const createButton = document.querySelector('#createButton')
 const deleteAllButton = document.querySelector('#deleteAllButton')
-const navnFelt = document.querySelector('.navnFelt')
-const alderFelt = document.querySelector('.alderFelt')
-const hårfargeFelt = document.querySelector('.hårfargeFelt')
-const hobbyFelt = document.querySelector('.hobbyFelt')
-const favorittfagFelt = document.querySelector('.fagFelt')
 
 var divString = ["Navn: ", "Alder: ", "Hårfarge: ", "Hobby: ", "Favorittfag: "]
 var arr = []
-var navn;
-var alder;
-var hårfarge;
-var hobby;
-var favorittfag;
 var updating = false;
-var delInt = 0
 var updInt
-var valueInAllFields = true
-var clearLC = false
+var amountofinputs = 5
+var person = []
 localStorage.arr
-
-
-if (localStorage.getItem('navn') !== null) {
-    testbool = true
-}   
 
 function loadData() {
     if (localStorage.getItem('arr') !== null) {
         arr = JSON.parse(localStorage.arr)
-    }
-}
+    }}
+
 
 function saveData() {
     localStorage.arr = JSON.stringify(arr)
@@ -39,48 +23,39 @@ function saveData() {
 function createInfo() {
     if (updating == false) {
     
-    if (clearLC == false) {
-    
-        if (!navnFelt.value.length == 0 && !alderFelt.value.length == 0 && !hårfargeFelt.value.length == 0 && !hobbyFelt.value.length == 0 && !favorittfagFelt.value.length == 0) {
-            person = [
-                navnFelt.value,
-                alderFelt.value,
-                hårfargeFelt.value,
-                hobbyFelt.value,
-                favorittfagFelt.value
-            ]
+    if (checkLC() == false) {
+        let bool = false
+        for (let i = 0; i < amountofinputs; i++) {
+            if (!getFieldData(i).length == 0) {
+                bool = true }
+        }
+        if (bool == true) {
+            for (let i = 0; i < amountofinputs; i++) {
+                person[i] = getFieldData(i)
+            }
             arr[arr.length] = person
             saveData()
             Load()
-        }   else {
         }
-    
         }   else {
             loadData()
-            
-            person = [
-                navnFelt.value,
-                alderFelt.value,
-                hårfargeFelt.value,
-                hobbyFelt.value,
-                favorittfagFelt.value
-            ]
-            arr[arr.length] = person
-
-            clearLC = false
+            for (let i = 0; i < amountofinputs; i++) {
+                person[i] = getFieldData(i)
+            }
+            arr.push(person)
             saveData()
             Load()
         }
        } else {
         loadData()
-        for (let i = 0; i < 5; i++) {
-            arr[updInt][i] = document.getElementById("input" + i).value
+        for (let i = 0; i < amountofinputs; i++) {
+            arr[updInt][i] = getFieldData(i)
         }
         saveData()
 
         updating = false;
 
-        for (let t = 0; t < 5; t++) {
+        for (let t = 0; t < amountofinputs; t++) {
             document.getElementById("input" + t).value = ""
         }
         createButton.textContent = "Create"
@@ -93,12 +68,12 @@ function updatePressed() {
     createButton.textContent = "Update"
     loadData()
 
-    for (let i = 0; i < 5; i++) {
-        document.getElementById("input"+i).value = arr[updInt][i]
+    for (let i = 0; i < amountofinputs; i++) {
+        getFieldData(i) = arr[updInt][i]
     }
 }
 
-function delKnappTrykket() {
+function delKnappTrykket(delInt) {
     if (mainDiv.childElementCount == 1) {
         localStorage.clear()
         location.reload()
@@ -111,18 +86,21 @@ function delKnappTrykket() {
     }
 }
 
+function getFieldData(int){
+    return document.getElementById('input'+int).value
+}
+
 function Load() {
     loadData()
     mainDiv.innerHTML = ""
     for (var i = 0; i < arr.length; i++) {
-
         var liste = document.createElement("list");
         liste.className = "listklasse"
         liste.style.fontSize = "30px"
         liste.style.display = "flex"
         liste.style.flexDirection = "column"
 
-        for (let t = 0; t < 5; t++) {
+        for (let t = 0; t < amountofinputs; t++) {
             liste.appendChild(document.createTextNode(divString[t] + arr[i][t] + ""))
             if (!t < 3) {liste.appendChild(document.createElement("br"))}
         }
@@ -132,8 +110,7 @@ function Load() {
         knapp.id = i
         knapp.addEventListener("click", function(index) {
         return function(){
-            delInt = index
-            delKnappTrykket()
+            delKnappTrykket(index)
             }
         }(i))
         liste.appendChild(knapp);
@@ -160,12 +137,14 @@ function deleteAll() {
     }
 }
 
-if(typeof(localStorage.arr)=='undefined'){
-    clearLC = true
-}   else {
-    clearLC = false
-    Load()
+function checkLC() {
+    if(typeof(localStorage.arr)=='undefined'){
+    return true;
+    } else {
+    return false
+    }
 }
+if (checkLC() == false) {Load()}
 
 createButton.addEventListener('click', createInfo)
 deleteAllButton.addEventListener('click', deleteAll)
